@@ -1,0 +1,10 @@
+<!Doctype html>
+<body>
+Käyttäjän määrä: {{ count }}
+<hr>
+{% for user in usernames %}
+{{ user.username }}
+<hr>
+{% endfor %}
+<a href="/new">Luo Käyttäjä</a>
+</body>
