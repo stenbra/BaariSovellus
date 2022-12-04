@@ -1,0 +1,28 @@
+<!Doctype html>
+<body>
+  {{session.user_id}}
+<form action="/editbar" method="POST">
+Nimi: <br>
+<textarea name="barname" rows="2" cols="40" required></textarea>
+<br>
+kuvaus: <br>
+<textarea name="description" rows="10" cols="40" required></textarea>
+<br>
+Osoite: <br>
+<textarea name="address" rows="1" cols="80" required></textarea>
+<br>
+Avoinna: <br>
+<br>
+Ma<input type="time" name="1o" id ="1o" min="00:00" max="23:59" > - <input type="time" name="1c" id ="1c" min="00:00" max="23:59" ><br>
+Ti<input type="time" name="2o" id ="2o" min="00:00" max="23:59" > - <input type="time" name="2c" id ="2c" min="00:00" max="23:59" ><br>
+Ke<input type="time" name="3o" id ="3o" min="00:00" max="23:59" > - <input type="time" name="3c" id ="3c" min="00:00" max="23:59" ><br>
+To<input type="time" name="4o" id ="4o" min="00:00" max="23:59" > - <input type="time" name="4c" id ="4c" min="00:00" max="23:59" ><br>
+Pe<input type="time" name="5o" id ="5o" min="00:00" max="23:59" > - <input type="time" name="5c" id ="5c" min="00:00" max="23:59" ><br>
+La<input type="time" name="6o" id ="6o" min="00:00" max="23:59" > - <input type="time" name="6c" id ="6c" min="00:00" max="23:59" ><br>
+Su<input type="time" name="7o" id ="7o" min="00:00" max="23:59" > - <input type="time" name="7c" id ="7c" min="00:00" max="23:59" ><br>
+{% if message %}
+<div style="background-color:yellow;"><p>{{message}}</p></div>
+{% endif %}
+<input type="submit" value="Valmis">
+</form>
+</body>

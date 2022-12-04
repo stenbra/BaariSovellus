@@ -1,0 +1,21 @@
+<!Doctype html>
+<body>
+<form action="/register" method="POST">
+Nimi: <br>
+<textarea name="uname" rows="1" cols="40" required></textarea>
+<br>
+Salasana: <br>
+<textarea name="upass" rows="1" cols="40" required></textarea>
+<br>
+Salasanan varmistus: <br>
+<textarea name="upass2" rows="1" cols="40" required></textarea>
+<br>
+{% if message %}
+<div style="background-color:yellow;"><p>{{message}}</p></div>
+{% endif %}
+<div class="">
+  <input type="checkbox" name="barowner",id="barowner" value="True"><label>Bar owner</label>
+</div>
+<input type="submit" value="Luo käyttäjä">
+</form>
+</body>

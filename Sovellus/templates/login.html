@@ -1,0 +1,15 @@
+<!Doctype html>
+<body>
+  <form action="/login" method="POST">
+  Nimi: <br>
+  <textarea name="uname" rows="1" cols="40" required></textarea>
+  <br>
+  Salasana: <br>
+  <textarea name="upass" rows="1" cols="40" required></textarea>
+  <br>
+  {% if message %}
+  <div style="background-color:yellow;"><p>{{message}}</p></div>
+  {% endif %}
+  <input type="submit" value="Lähetä">
+  </form>
+</body>

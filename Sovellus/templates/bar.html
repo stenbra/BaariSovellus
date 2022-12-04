@@ -1,0 +1,44 @@
+<!Doctype html>
+<body>
+  <div style="float: center,">
+    <h2>{{ name.name }}</h2>
+    <P>{{description.description}}</P>
+    <P>{{address.address}}</P>
+    <!-- not very clean but it works -->
+    {% for day in hours %}
+      {{weekLabels[day.weekday-1]}} {{day.opening}} - {{day.closing}} <br>
+    {% endfor %}
+  </div>
+
+  <h3>Arvostelut<h3>
+    {% if session.user_id %}
+      <form action="/bar" method="POST">
+        <input type="hidden" name="bar_id" value="{{ name.id }}">
+        Arvostelu 1 - 5<input type="number" name="rating" min="1" max="5" required><br>
+        kommenti<textarea name="comment" rows="3" cols="40" ></textarea>
+        <br>
+        <button>lähetä</button>
+      </form>
+    {% endif %}
+  <div>
+    {% for review in reviews %}
+     <div style="background-color:blue;">
+       <p>{{review.rating}}</p>
+       <p>{{review.comment}}</p>
+       <p>{{review.username}}</p>
+       {% if session.username %}
+         {% if session.username == review.username or session.admin == True %}
+         <form action="/bar" method="POST">
+           <input type="hidden" name="bar_id" value="{{ name.id }}">
+           <input type="hidden" name="r_id" value="{{ review.id }}">
+           <button>Poista</button>
+         </form>
+         {% endif %}
+       {% endif %}
+     </div>
+
+
+    {% endfor %}
+  </div>
+
+</body>
