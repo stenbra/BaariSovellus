@@ -16,9 +16,14 @@
  
  ## projektin status
 baarien luento toimii
+
 arviointit toimii
+
 user jutut (login,luo käyttäjä,logout) on olemassa
 
+
 Filtered haku ja categoriat ei ole olemmassa vielä
+
 baarien sivujen data ei voidan päivittää vielä
+
 ja ulkoasu ei ole kunnossa vielä
