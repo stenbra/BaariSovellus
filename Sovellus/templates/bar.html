@@ -1,24 +1,47 @@
 <!Doctype html>
 <body>
+
+  {% if session.user_id %}
+    {% if session.user_id == bardata[0].owner_id or session.admin == True %}
+    <form action="/editbar" method="POST">
+      <input type="hidden" name="bar_id" value="{{ bardata[0].id }}">
+      <button>Muokkaa tietoja</button>
+    </form>
+    <form action="/removebar" method="POST">
+      <input type="hidden" name="bar_id" value="{{ bardata[0].id }}">
+      <button>Poista</button>
+    </form>
+    {% endif %}
+  {% endif %}
   <div style="float: center,">
-    <h2>{{ name.name }}</h2>
-    <P>{{description.description}}</P>
-    <P>{{address.address}}</P>
+    <h2>{{ bardata[0].name }}</h2>
+    <P>{{bardata[0].description}}</P>
+    <P>{{bardata[0].address}}</P>
     <!-- not very clean but it works -->
-    {% for day in hours %}
-      {{weekLabels[day.weekday-1]}} {{day.opening}} - {{day.closing}} <br>
+    {% for data in bardata %}
+      {% if data.weekday %}
+       {{weekLabels[data.weekday-1]}} {{data.opening}} - {{data.closing}} <br>
+      {% endif %}
     {% endfor %}
   </div>
 
-  <h3>Arvostelut<h3>
+  <h3>Arvioinnit<h3>
+    {% if bardata[0].rating %}
+    <p>{{bardata[0].rating}} / 5</p>
+    {% else %}
+    <p>ei arvioitu</p>
+    {% endif %}
+    <p>Arvioi:</p>
     {% if session.user_id %}
       <form action="/bar" method="POST">
-        <input type="hidden" name="bar_id" value="{{ name.id }}">
+        <input type="hidden" name="bar_id" value="{{ bardata[0].id }}">
         Arvostelu 1 - 5<input type="number" name="rating" min="1" max="5" required><br>
         kommenti<textarea name="comment" rows="3" cols="40" ></textarea>
         <br>
         <button>lähetä</button>
       </form>
+    {% else %}
+      <a href="/login">kirjaudu</a>
     {% endif %}
   <div>
     {% for review in reviews %}
@@ -29,7 +52,7 @@
        {% if session.username %}
          {% if session.username == review.username or session.admin == True %}
          <form action="/bar" method="POST">
-           <input type="hidden" name="bar_id" value="{{ name.id }}">
+           <input type="hidden" name="bar_id" value="{{ bardata[0].id }}">
            <input type="hidden" name="r_id" value="{{ review.id }}">
            <button>Poista</button>
          </form>

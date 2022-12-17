@@ -1,6 +1,48 @@
 <!Doctype html>
 <body>
-  {{session.user_id}}
+{% if bardata %}
+<form action="/editbar" method="POST">
+{{ bardata[0].name }}
+<input type="hidden" name="barname" value="{{ bardata[0].name }}">
+<br>
+kuvaus: <br>
+<textarea name="description" rows="10" cols="40" required>{{ bardata[0].description }}</textarea>
+<br>
+Osoite: <br>
+<textarea name="address" rows="1" cols="80" required>{{ bardata[0].address }}</textarea>
+<br>
+Avoinna: <br>
+<br>
+{% for i in range(7) %}
+{% if i in presentDays%}
+{% for data in bardata %}
+  {% if data.weekday-1 == i %}
+   {% if data.opening %}
+   {{weekLabels[data.weekday-1]}}<input type="time" name="{{data.weekday}}o" id ="{{data.weekday}}o" min="00:00" max="23:59" value="{{data.opening}}">
+   {% else %}
+   {{weekLabels[data.weekday-1]}}<input type="time" name="{{data.weekday}}o" id ="{{data.weekday}}o" min="00:00" max="23:59" >
+   {%endif%}
+   {% if data.closing %}
+   - <input type="time" name="{{data.weekday}}c" id ="{{data.weekday}}c" min="00:00" max="23:59" value="{{data.closing}}"><br>
+   {%else%}
+   - <input type="time" name="{{data.weekday}}c" id ="{{data.weekday}}c" min="00:00" max="23:59" ><br>
+   {% endif %}
+  {% endif %}
+{% endfor %}
+{% else %}
+{{weekLabels[i]}}<input type="time" name="{{i+1}}o" id ="{{i+1}}o" min="00:00" max="23:59" >
+- <input type="time" name="{{i+1}}c" id ="{{i+1}}c" min="00:00" max="23:59" ><br>
+{% endif %}
+{% endfor %}
+{% if message %}
+<div style="background-color:yellow;"><p>{{message}}</p></div>
+{% endif %}
+<input type="submit" value="Valmis">
+</form>
+
+
+
+{% else %}
 <form action="/editbar" method="POST">
 Nimi: <br>
 <textarea name="barname" rows="2" cols="40" required></textarea>
@@ -25,4 +67,8 @@ Su<input type="time" name="7o" id ="7o" min="00:00" max="23:59" > - <input type=
 {% endif %}
 <input type="submit" value="Valmis">
 </form>
+
+
+
+{% endif%}
 </body>

@@ -2,11 +2,18 @@
 <body>
 <div style="background-color:black;">
   <div style="float: right;background-color:orange;overflow-wrap: break-word;">
+  <form href="/" method="post">
+    <textarea name="search" rows="1" cols="40" required></textarea>
+    <button>Hae</button>
+  </form>
   {% if session.user_id %}
     <p>{{session.username}}</p>
     <a href="/logout">Kirjaudu ulos</a>
     {% if session.barowner ==True %}
-      <a href="/">Omat baarit</a>
+      <form action="/" method="POST">
+        <input type="hidden" name="owner_id" value="{{ session.user_id }}">
+        <button>Omat baarit</button>
+      </form>
       <a href="/editbar">+ luo baari</a>
     {% endif %}
     {% else %}
@@ -17,12 +24,22 @@
 </div>
 <div>
 Baarin määrä: {{ count }}
+<a href="/">BAARIT</a>
+<form action="/" method="POST">
+  <input type="hidden" name="top" value="top">
+  <button>Paras arvioitu baarit</button>
+</form>
 <hr>
 {% for bar in bars %}
 <form action="/bar" method="POST">
   <input type="hidden" name="bar_id" value="{{ bar.id }}">
   <button>{{ bar.name }}</button>
 </form>
+{% if bar.rating  %}
+<p>{{bar.rating }} / 5</p>
+{% else %}
+<p>ei arvosteltu</p>
+{% endif %}
 {% if session.user_id %}
   {% if bar.owner_id == session.user_id or session.admin == True %}
     <form action="/removebar" method="POST">

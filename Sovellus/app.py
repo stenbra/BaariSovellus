@@ -14,9 +14,19 @@ weekdayList = ["Ma","Ti","Ke","To","Pe","La","Su"]
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    result = db.session.execute("SELECT * FROM bars")
-    bars = result.fetchall()
-    return render_template("index.html", count=len(bars), bars=bars)
+    if session.get("last_bar"):
+        del session["last_bar"]
+    if request.method == "GET":
+        bars = get_bars()
+        return render_template("index.html", count=len(bars), bars=bars)
+    if request.method == "POST":
+        if "owner_id" in request.form:
+            bars = get_bars_filter_by_owner(request.form["owner_id"])
+        elif "search" in request.form:
+            bars = get_bars_filter_by_word(request.form["search"])
+        elif "top" in request.form:
+            bars = get_bars_filter_by_rating()
+        return render_template("index.html", count=len(bars), bars=bars)
 
 @app.route("/removebar", methods=["GET", "POST"])
 def removebar():
@@ -27,8 +37,18 @@ def removebar():
 
 @app.route("/bar", methods=["GET", "POST"])
 def barpage():
+    if request.method == "GET":
+        if not session.get("last_bar"):
+            redirect("/")
+        bar_id=session["last_bar"]
+        data = get_bar_data(bar_id)
+        review_data = get_bar_reviews(bar_id)
+        return render_template("bar.html",bardata=data,reviews=review_data,weekLabels= weekdayList)
+
     if request.method == "POST":
         bar_id = request.form["bar_id"]
+        if not bar_id and session.get("last_bar"):
+            bar_id = session["last_bar"]
         if not bar_id:
             return redirect("/")
         if "r_id" in request.form:
@@ -45,13 +65,22 @@ def barpage():
                 if not add_review(user_id(),bar_id,rating,comment):
                     return redirect("/")
         data = get_bar_data(bar_id)
-        return render_template("bar.html",name=data["name"],description=data["description"],address=data["address"],hours=data["hours"],reviews=data["reviews"],weekLabels= weekdayList)
+        review_data = get_bar_reviews(bar_id)
+        session["last_bar"]= bar_id
+        return render_template("bar.html",bardata=data,reviews=review_data,weekLabels= weekdayList)
 
 @app.route("/editbar", methods=["GET","POST"])
 def editbar():
     if request.method =="GET":
         return render_template("editbar.html")
     if request.method == "POST":
+        if "bar_id" in request.form:
+            data = get_bar_data(request.form["bar_id"])
+            presentDays =[]
+            for i in data:
+                if i.weekday:
+                    presentDays.append(i.weekday-1)
+            return render_template("editbar.html",bardata=data,weekLabels= weekdayList,presentDays=presentDays)
         barname = request.form["barname"]
         description = request.form["description"]
         address = request.form["address"]
@@ -93,6 +122,8 @@ def login():
         username = request.form["uname"]
         password = request.form["upass"]
         if login_user(username, password):
+            if session.get("last_bar"):
+                return redirect("/bar")
             return redirect("/")
         else:
             return render_template("login.html", message="Väärä tunnus tai salasana")
@@ -155,7 +186,7 @@ def edit_bar(barname,description,address,opening,closing):
     if not bar:
         return add_bar(barname,description,address,opening,closing)
     else:
-        return update_bar()
+        return update_bar(barname,description,address,opening,closing)
 
 def add_bar(barname,description,address,opening,closing):
     try:
@@ -194,27 +225,61 @@ def add_bar(barname,description,address,opening,closing):
                 pass
     return True
 
-def update_bar():
-    pass
+def update_bar(barname,description,address,opening,closing):
+    try:
+        sql = "SELECT id FROM bars WHERE name=:barname"
+        result = db.session.execute(sql, {"barname":barname})
+        bar = result.fetchone()
+    except:
+        return False
+    if not bar:
+        return False
+    try:
+        sql = "UPDATE description SET description=:description WHERE description.bar_id=:bar_id"
+        db.session.execute(sql, {"description":description,"bar_id":bar.id})
+        db.session.commit()
+    except:
+        return False
+    try:
+        sql = "UPDATE location SET address=:address WHERE location.bar_id=:bar_id"
+        db.session.execute(sql, {"address":address,"bar_id":bar.id})
+        db.session.commit()
+    except:
+        return False
+    for i in range(7):
+        sql = "SELECT id FROM openhours WHERE weekday=:weekday AND bar_id=:bar_id"
+        result =db.session.execute(sql, {"weekday":i+1,"bar_id":bar.id})
+        openHours=result.fetchone()
+        if not openHours:
+            if opening[i] or closing[i]:
+                try:
+                    sql = "INSERT INTO openhours (weekday,opening,closing,bar_id) VALUES (:weekday,:opening,:closing,:bar_id)"
+                    db.session.execute(sql,{"weekday":i+1,"opening":opening[i],"closing":closing[i],"bar_id":bar.id})
+                    db.session.commit()
+                except:
+                    pass
+        else:
+            if not opening[i] and not closing[i]:
+                sql = "DELETE FROM openhours WHERE bar_id=:bar_id AND weekday=:weekday"
+                db.session.execute(sql,{"bar_id":bar.id,"weekday":i+1})
+                db.session.commit()
+            else:
+                sql = "UPDATE openhours SET opening=:opening,closing=:closing WHERE weekday=:weekday AND bar_id=:bar_id"
+                db.session.execute(sql, {"opening":opening[i],"closing":closing[i],"weekday":i+1,"bar_id":bar.id})
+                db.session.commit()
+    return True
 
 def get_bar_data(bar_id):
-    datadict ={}
-    sql = "SELECT id,name FROM bars WHERE id=:id"
+    sql = "SELECT DISTINCT bars.id,bars.owner_id,bars.name,description.description,location.address,openhours.weekday,openhours.opening,openhours.closing,ROUND(AVG(reviews.rating),1) AS rating FROM bars LEFT JOIN description ON bars.id = description.bar_id LEFT JOIN location ON bars.id=location.bar_id LEFT JOIN openhours ON bars.id = openhours.bar_id LEFT JOIN  reviews ON reviews.bar_id = bars.id WHERE bars.id =:id GROUP BY bars.id,description.id,location.id,openhours.id ORDER BY rating"
     result = db.session.execute(sql, {"id":bar_id})
-    datadict["name"] = result.fetchone()
-    sql = "SELECT description FROM description WHERE bar_id=:id"
-    result = db.session.execute(sql, {"id":bar_id})
-    datadict["description"] = result.fetchone()
-    sql = "SELECT address FROM location WHERE bar_id=:id"
-    result = db.session.execute(sql, {"id":bar_id})
-    datadict["address"] = result.fetchone()
-    sql = "SELECT weekday,opening,closing FROM openhours WHERE bar_id=:id"
-    result = db.session.execute(sql, {"id":bar_id})
-    datadict["hours"] = result.fetchall()
+    bardata = result.fetchall()
+    return bardata
+
+def get_bar_reviews(bar_id):
     sql = "SELECT T.id,T.rating,T.comment,U.username FROM reviews T,users U WHERE T.bar_id=:b_id AND U.id=T.user_id"
     result = db.session.execute(sql, {"b_id":bar_id})
-    datadict["reviews"] = result.fetchall()
-    return datadict
+    reviews = result.fetchall()
+    return reviews
 def add_review(user_id,bar_id,rating,comment):
     try:
         sql = "INSERT INTO reviews (comment,rating,user_id,bar_id) VALUES (:comment,:rating,:user_id,:bar_id)"
@@ -240,10 +305,34 @@ def check_if_already_reviewed(u_id,bar_id):
     if not a:
         return False
     return True
+def get_bat_reviewScore(bar_id):
+    try:
+        sql = "SELECT AVG(rating) FROM reviews WHERE bar_id =:id"
+        result = db.session.execute(sql, {"b_id":bar_id,"u_id":u_id})
+        a = result.fetchone()
+        return a
+    except:
+        pass
 def remove_bar(id):
     try:
+        sql ="DELETE FROM reviews WHERE bar_id=:bar_id"
+        db.session.execute(sql,{"bar_id":id})
+        db.session.commit()
         sql = "DELETE FROM bars WHERE id=:bar_id"
         db.session.execute(sql,{"bar_id":id})
         db.session.commit()
     except:
         return False
+def get_bars():
+    result = db.session.execute("SELECT bars.name, bars.id, bars.owner_id, ROUND(AVG(reviews.rating),1) AS rating FROM bars LEFT JOIN  reviews ON reviews.bar_id = bars.id GROUP BY bars.id")
+    return result.fetchall()
+def get_bars_filter_by_word(word):
+    word= "%"+str(word)+"%"
+    result = db.session.execute("SELECT bars.name, bars.id, bars.owner_id, ROUND(AVG(reviews.rating),1) AS rating FROM bars LEFT JOIN  reviews ON reviews.bar_id = bars.id LEFT JOIN description ON description.bar_id = bars.id WHERE bars.name LIKE :word OR description.description LIKE :word GROUP BY bars.id",{"word":word})
+    return result.fetchall()
+def get_bars_filter_by_owner(owner_id):
+    result = db.session.execute("SELECT bars.name, bars.id, bars.owner_id, ROUND(AVG(reviews.rating),1) AS rating FROM bars LEFT JOIN  reviews ON reviews.bar_id = bars.id WHERE bars.owner_id=:owner_id GROUP BY bars.id",{"owner_id":owner_id})
+    return result.fetchall()
+def get_bars_filter_by_rating():
+    result = db.session.execute("SELECT bars.name, bars.id, bars.owner_id, ROUND(AVG(reviews.rating),1) AS rating FROM bars LEFT JOIN  reviews ON reviews.bar_id = bars.id WHERE rating IS NOT NULL GROUP BY bars.id ORDER BY rating DESC")
+    return result.fetchall()
