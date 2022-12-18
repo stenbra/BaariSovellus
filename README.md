@@ -14,15 +14,15 @@
  ## testaus
  pahoitelen yrittin niin kauan saada soveluksen toimimaan fly.io avulla mutta se ei onnistui
  ### asenus
-ajaa kommenton pip install requirements.txt tai poetry install
-asenta erikseen dotenv pip:illä
-asenta postgresql kursimaterialin avulla
-voit käyttäää dbdump tietokantan rakentamiseen    psql database < dbdump
-voit muokka .env tiedoston oikeiden arvoihin
+ajaa kommenton pip install requirements.txt tai poetry install.
+asenta erikseen dotenv pip:illä.
+asenta postgresql kursimaterialin avulla.
+voit käyttäää dbdump tietokantan rakentamiseen    psql database < dbdump.
+voit muokka .env tiedoston oikeiden arvoihin.
 -Jos on ongelmia dotenv kanssa voit poista rivit 4 ja 6 app.py:stä ja manualisesti asentaa SECRET_KEY ja DATABASE_URL environment varialbes.
 ### testamisen
-voit käyttää poetry shell tai venv
-kun olet virtuali ympäröstössä anta kommenon flask run HUOM! pitäis olla Sovellus tiedostossa kun annat komenton
+voit käyttää poetry shell tai venv.
+kun olet virtuali ympäröstössä anta kommenon flask run HUOM! pitäis olla Sovellus tiedostossa kun annat komenton.
 
  ## Kuvat
  jos ei saa sovelluksen toimimaan on olemassa kuvat tiedosto missitä voit nähdä kaikki eri suvujen ulkoasut
