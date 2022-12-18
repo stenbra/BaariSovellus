@@ -1,54 +1,234 @@
 <!Doctype html>
+<style media="screen">
+
+.topnav{
+  background-color: #000;
+  margin-bottom: 20px;
+  height: 50px;
+  overflow: hidden;
+  font-weight: bold;
+  padding: 1px;
+}
+
+.body {
+  margin: auto;
+  max-width: 80%;
+  font-family: "Arial";
+  align-items: center;
+}
+.searchbar{
+  align-items: center;
+  float: left;
+  margin-left: 100px;
+  padding: 15px;
+  width: 30%;
+  height: 100%;
+}
+.logins {
+  float:right;
+  width: 40%;
+  height: 100%;
+  overflow: hidden;
+}
+.topBars{
+  float:left;
+  margin-left: 4px;
+  height: 100%;
+  width: 10%;
+  text-align: center;
+  line-height: 50px;
+  font-size: 12px;
+  overflow: hidden;
+  background-color: orange;
+}
+.home{
+  width: 5%;
+  overflow: hidden;
+  height: 100%;
+  float:left;
+  text-align: center;
+  line-height: 50px;
+  font-size: 12px;
+  background-color: orange;
+  font-family: "Arial";
+  text-decoration: none;
+}
+a.fill-div{
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+}
+.link-button{
+  background: none;
+  border:none;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 50px;
+  font-size: 12px;
+  font-family: "Arial";
+}
+.logbutton{
+  width:15%;
+  height: 100%;
+  line-height: 50px;
+  font-size: 12px;
+  float: right;
+  margin-left: 3px;
+  text-align: center;
+  background-color: orange;
+  font-family: "Arial";
+  text-decoration: none;
+}
+.logbutton :hover{
+  background-color: yellow;
+}
+.home :hover{
+  background-color: yellow;
+}
+.topBars :hover{
+  background-color: yellow;
+}
+.stuff{
+  width: 60%;
+  margin-left: 20%;
+  margin-right:20%;
+  align-self: center;
+  align-content: center;
+}
+.barentry{
+  background-color: orange;
+  margin-top: 10px;
+  height: 70px;
+  padding-left: 20px;
+  width: 100%;
+  border-radius: 25px;
+}
+.rating{
+  float:right;
+  background-color: #F66;
+  text-align: center;
+  line-height: 100%;
+  width: 10%;
+  font-family: "Arial";
+}
+.barname{
+  float:left;
+  line-height: 70px;
+  margin-top: 5px;
+  text-align: left;
+  height: 60px;
+  font-family: "Arial";
+  font-size: 24px;
+  font-weight: bold;
+}
+.deleter{
+  float:right;
+  border-radius: 15px;
+  background-color: #F00;
+}
+.view{
+  float:right;
+  border-radius: 5px;
+  width: 400px;
+  margin-right: 4px;
+  text-align: center;
+  height: 48px;
+  background-color: #000;
+}
+.view :hover{
+  background-color: #CCC;
+}
+.Baarisovellus{
+  float:left;
+  color:orange;
+  width: 5%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 30px;
+}
+</style>
 <body>
-<div style="background-color:black;">
-  <div style="float: right;background-color:orange;overflow-wrap: break-word;">
-  <form href="/" method="post">
-    <textarea name="search" rows="1" cols="40" required></textarea>
-    <button>Hae</button>
-  </form>
+<div class="topnav">
+  <div class="home">
+    <a href="/" class="fill-div">Baarit</a>
+  </div>
+  <div class="topBars">
+    <form action="/" method="POST">
+      <input type="hidden" name="top" value="top">
+      <input type="submit" class="link-button" value="Paras arvioitut baarit">
+    </form>
+  </div>
+  <div class="searchbar">
+    <form href="/" method="post">
+      <input type="text" name="search" rows="1" cols="40" required><button>Hae</button>
+    </form>
+  </div>
+  <div class="Baarisovellus">
+    Baarisovellus
+  </div>
+  <div class="logins">
   {% if session.user_id %}
-    <p>{{session.username}}</p>
-    <a href="/logout">Kirjaudu ulos</a>
+    <div class="logbutton">
+      {{session.username}}
+    </div>
+    <div class="logbutton">
+      <a href="/logout" class="fill-div">Kirjaudu ulos</a>
+    </div>
     {% if session.barowner ==True %}
+      <div class="logbutton">
       <form action="/" method="POST">
         <input type="hidden" name="owner_id" value="{{ session.user_id }}">
-        <button>Omat baarit</button>
+        <input type="submit" class="link-button" value="Omat baarit">
       </form>
-      <a href="/editbar">+ luo baari</a>
+      </div>
+      <div class="logbutton">
+        <a href="/editbar" class="fill-div">Luo baari</a>
+      </div>
     {% endif %}
     {% else %}
-    <a href="/register">Luo Käyttäjä</a>
-    <a href="/login">kirjaudu</a>
+    <div class="logbutton">
+      <a href="/register" class="fill-div">Luo Käyttäjä</a>
+    </div>
+    <div class="logbutton">
+      <a href="/login" class="fill-div">kirjaudu</a>
+    </div>
   {% endif %}
   </div>
 </div>
-<div>
-Baarin määrä: {{ count }}
-<a href="/">BAARIT</a>
-<form action="/" method="POST">
-  <input type="hidden" name="top" value="top">
-  <button>Paras arvioitu baarit</button>
-</form>
+<br>
+<div class="stuff">
+Hakun tulokset {{ count }}
 <hr>
 {% for bar in bars %}
-<form action="/bar" method="POST">
-  <input type="hidden" name="bar_id" value="{{ bar.id }}">
-  <button>{{ bar.name }}</button>
-</form>
-{% if bar.rating  %}
-<p>{{bar.rating }} / 5</p>
-{% else %}
-<p>ei arvosteltu</p>
-{% endif %}
+<div class="barentry">
+  <div class="barname">
+    {{bar.name}}
+  </div>
+  <div class="rating">
+    {% if bar.rating  %}
+    <p>{{bar.rating }} / 5.0</p>
+    {% else %}
+    <p>ei arvioitu</p>
+    {% endif %}
+  </div>
+  <div class="view">
+  <form action="/bar" method="POST">
+    <input type="hidden" name="bar_id" value="{{ bar.id }}"><input type="submit" style="font-size:24px;color:orange;" class="link-button" value="Avaa">
+  </form>
+</div>
 {% if session.user_id %}
   {% if bar.owner_id == session.user_id or session.admin == True %}
+  <div class="deleter">
     <form action="/removebar" method="POST">
       <input type="hidden" name="bar_id" value="{{ bar.id }}">
-      <button>Poista</button>
+      <input type="submit" class="link-button" value="Poista">
     </form>
+    </div>
   {% endif %}
 {% endif %}
-<hr>
+</div>
 {% endfor %}
 </div>
 </body>

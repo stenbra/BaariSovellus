@@ -1,16 +1,29 @@
 <!Doctype html>
+<style media="screen">
+.loginbox{
+  width: 40%;
+  margin-left: 30%;
+  margin-right: 30%;
+  margin-top: 10%;
+  padding: 20px;
+  background: orange;
+}
+</style>
 <body>
+  <div class="loginbox">
+  <h1>Kirjaudu</h1>
   <form action="/login" method="POST">
   Nimi: <br>
   <textarea name="uname" rows="1" cols="40" required></textarea>
   <br>
   Salasana: <br>
-  <textarea name="upass" rows="1" cols="40" required></textarea>
+<input type="password" name="upass"  required>
   <br>
   {% if message %}
   <div style="background-color:yellow;"><p>{{message}}</p></div>
   {% endif %}
-  <input type="submit" value="Lähetä">
+  <input type="submit" value="Kirjaudu">
   </form>
   <a href="/register">Luo uusi Käyttäjä</a>
+  </div>
 </body>

@@ -1,13 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask import redirect, render_template, request, session
+from os import getenv
 import os
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///stenbras"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///stenbras"#getenv("DATABASE_URL")
 db = SQLAlchemy(app)
-app.secret_key = os.urandom(24)
+app.secret_key = os.urandom(24)#getenv("SECRET_KEY")
 
 weekdayList = ["Ma","Ti","Ke","To","Pe","La","Su"]
 
@@ -111,6 +112,8 @@ def register():
         if password1 != password2:
             return render_template("register.html", message="Salasanat eroavat")
         if register_user(username, password1,barowner):
+            if session.get("last_bar"):
+                return redirect("/bar")
             return redirect("/")
         else:
             return render_template("register.html", message="Rekisteröinti ei onnistunut")
@@ -142,12 +145,8 @@ def delete_sessions():
     del session["barowner"]
 
 def login_user(username, password):
-    try:
-        sql = "SELECT id, password,admin,barowner FROM users WHERE username=:username"
-        result = db.session.execute(sql, {"username":username})
-        user = result.fetchone()
-    except:
-        return False
+    user = get_user(username)
+    print(user)
     if not user:
         return False
     else:
@@ -160,7 +159,20 @@ def login_user(username, password):
         else:
             return False
 
+def get_user(username):
+    try:
+        sql = "SELECT id, password,admin,barowner FROM users WHERE username=:username"
+        result = db.session.execute(sql, {"username":username})
+        return result.fetchone()
+    except:
+        return None
+
+
 def register_user(username, password,barowner):
+    add_user(username, password,barowner)
+    return login_user(username, password)
+
+def add_user(username, password,barowner):
     hash_pass = generate_password_hash(password)
     try:
         sql = "INSERT INTO users (username,password,admin,barowner) VALUES (:username,:password,:admin,:barowner)"
@@ -168,8 +180,6 @@ def register_user(username, password,barowner):
         db.session.commit()
     except:
         return False
-    return login_user(username, password)
-
 def user_id():
     return session.get("user_id")
 

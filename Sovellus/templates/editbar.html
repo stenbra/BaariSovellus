@@ -1,6 +1,18 @@
 <!Doctype html>
+<style media="screen">
+.editbar{
+  width: 40%;
+  margin-left: 30%;
+  margin-right: 30%;
+  margin-top: 10%;
+  padding: 40px;
+  background: orange;
+}
+</style>
 <body>
+<div class="editbar">
 {% if bardata %}
+<h1>Muokkaa Baari:</h1>
 <form action="/editbar" method="POST">
 {{ bardata[0].name }}
 <input type="hidden" name="barname" value="{{ bardata[0].name }}">
@@ -37,12 +49,13 @@ Avoinna: <br>
 {% if message %}
 <div style="background-color:yellow;"><p>{{message}}</p></div>
 {% endif %}
-<input type="submit" value="Valmis">
+<input type="submit" style="float:right;" value="Valmis">
 </form>
 
 
 
 {% else %}
+<h1>Luo Baari:</h1>
 <form action="/editbar" method="POST">
 Nimi: <br>
 <textarea name="barname" rows="2" cols="40" required></textarea>
@@ -65,10 +78,11 @@ Su<input type="time" name="7o" id ="7o" min="00:00" max="23:59" > - <input type=
 {% if message %}
 <div style="background-color:yellow;"><p>{{message}}</p></div>
 {% endif %}
-<input type="submit" value="Valmis">
+<input type="submit" style="float:right;" value="Valmis">
 </form>
 
 
 
 {% endif%}
+</div>
 </body>
