@@ -19,7 +19,7 @@ asenta erikseen dotenv pip:illä.
 asenta postgresql kursimaterialin avulla.
 voit käyttäää dbdump tietokantan rakentamiseen    psql database < dbdump.
 voit muokka .env tiedoston oikeiden arvoihin.
--Jos on ongelmia dotenv kanssa voit poista rivit 4 ja 6 app.py:stä ja manualisesti asentaa SECRET_KEY ja DATABASE_URL environment varialbes.
+-Jos on ongelmia dotenv kanssa voit poista rivit 4 ja 6 app.py:stä ja manualisesti asentaa SECRET_KEY ja DATABASE_URL environment variables.
 ### testamisen
 voit käyttää poetry shell tai venv.
 kun olet virtuali ympäröstössä anta kommenon flask run HUOM! pitäis olla Sovellus tiedostossa kun annat komenton.
