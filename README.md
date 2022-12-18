@@ -31,5 +31,5 @@ voit muokka .env tiedoston oikeiden arvoihin.
 voit käyttää poetry shell tai venv.
 kun olet virtuali ympäröstössä anta kommenon flask run HUOM! pitäis olla Sovellus hakemistossa kun annat komenton.
 
- ## Kuvat
- jos ei saa sovelluksen toimimaan on olemassa kuvat tiedosto missitä voit nähdä kaikki eri suvujen ulkoasut
+ ### Kuvat
+ jos ei saa sovelluksen toimimaan on olemassa kuvat tiedosto misitä voit nähdä kaikki eri suvujen ulkoasut
