@@ -29,7 +29,7 @@ voit muokka .env tiedoston oikeiden arvoihin.
 -Jos on ongelmia dotenv kanssa voit poista rivit 4 ja 6 app.py:stä ja manualisesti asentaa SECRET_KEY ja DATABASE_URL environment variables.
 ### testamisen
 voit käyttää poetry shell tai venv.
-kun olet virtuali ympäröstössä anta kommenon flask run HUOM! pitäis olla Sovellus tiedostossa kun annat komenton.
+kun olet virtuali ympäröstössä anta kommenon flask run HUOM! pitäis olla Sovellus hakemistossa kun annat komenton.
 
  ## Kuvat
  jos ei saa sovelluksen toimimaan on olemassa kuvat tiedosto missitä voit nähdä kaikki eri suvujen ulkoasut
