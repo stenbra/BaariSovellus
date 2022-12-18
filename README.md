@@ -22,7 +22,7 @@ asenta erikseen dotenv pip:illä.
 
 asenta postgresql kursimaterialin avulla.
 
-voit käyttäää dbdump tietokantan rakentamiseen    psql database < dbdump.
+voit käyttäää dbDump tietokantan rakentamiseen    psql database < dbDump.
 
 voit muokka .env tiedoston oikeiden arvoihin.
 
