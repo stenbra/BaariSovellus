@@ -1,29 +1,28 @@
 # BaariSovellus
-
+    
     Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
+    Jos käyttäjä on omistaja hän voi luoda baari.
+    Omisaja voi poista omat ja muokka baarit.
     Käyttäjä näkee baarit kartalla ja voi painaa baari, jolloin siitä näytetään lisää tietoa (kuten kuvaus ja aukioloajat).
-    Käyttäjä voi antaa arvion (tähdet ja kommentti) baarista ja lukea muiden antamia arvioita.
+    Käyttäjä voi antaa arvion (arvon ja kommentti) baarista ja lukea muiden antamia arvioita.
+    Käyttäjä voi poista oma arvion
     Ylläpitäjä voi lisätä ja poistaa baarit sekä määrittää baarista näytettävät tiedot.
     Käyttäjä voi etsiä kaikki baarit, joiden kuvauksessa on annettu sana.
     Käyttäjä näkee myös listan, jossa baarit on järjestetty parhaimmasta huonoimpaan arvioiden mukaisesti.
     Ylläpitäjä voi tarvittaessa poistaa käyttäjän antaman arvion.
-    Ylläpitäjä voi luoda ryhmiä, joihin baari voi luokitella. baari voi kuulua yhteen tai useampaan ryhmään.
-    
- ## testaus
- asenta venv ja kaikki requirements.txt kirjastot
- rakenta schema.sql avulla tieto kannan
- ja käytä kommenon flask run
  
- ## projektin status
-baarien luento toimii
+ ## testaus
+ pahoitelen yrittin niin kauan saada soveluksen toimimaan fly.io avulla mutta se ei onnistui
+ ### asenus
+ajaa kommenton pip install requirements.txt tai poetry install.
+asenta erikseen dotenv pip:illä.
+asenta postgresql kursimaterialin avulla.
+voit käyttäää dbdump tietokantan rakentamiseen    psql database < dbdump.
+voit muokka .env tiedoston oikeiden arvoihin.
+-Jos on ongelmia dotenv kanssa voit poista rivit 4 ja 6 app.py:stä ja manualisesti asentaa SECRET_KEY ja DATABASE_URL environment variables.
+### testamisen
+voit käyttää poetry shell tai venv.
+kun olet virtuali ympäröstössä anta kommenon flask run HUOM! pitäis olla Sovellus tiedostossa kun annat komenton.
 
-arviointit toimii
-
-user jutut (login,luo käyttäjä,logout) on olemassa
-
-
-Filtered haku ja categoriat ei ole olemmassa vielä
-
-baarien sivujen data ei voidan päivittää vielä
-
-ja ulkoasu ei ole kunnossa vielä
+ ## Kuvat
+ jos ei saa sovelluksen toimimaan on olemassa kuvat tiedosto missitä voit nähdä kaikki eri suvujen ulkoasut
