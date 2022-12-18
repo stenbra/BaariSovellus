@@ -1,0 +1,630 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.3
+-- Dumped by pg_dump version 12.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: bars; Type: TABLE; Schema: public; Owner: stenbras
+--
+
+CREATE TABLE public.bars (
+    id integer NOT NULL,
+    name text,
+    owner_id integer,
+    category integer
+);
+
+
+ALTER TABLE public.bars OWNER TO stenbras;
+
+--
+-- Name: bars_id_seq; Type: SEQUENCE; Schema: public; Owner: stenbras
+--
+
+CREATE SEQUENCE public.bars_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.bars_id_seq OWNER TO stenbras;
+
+--
+-- Name: bars_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: stenbras
+--
+
+ALTER SEQUENCE public.bars_id_seq OWNED BY public.bars.id;
+
+
+--
+-- Name: categories; Type: TABLE; Schema: public; Owner: stenbras
+--
+
+CREATE TABLE public.categories (
+    id integer NOT NULL,
+    category text
+);
+
+
+ALTER TABLE public.categories OWNER TO stenbras;
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: stenbras
+--
+
+CREATE SEQUENCE public.categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.categories_id_seq OWNER TO stenbras;
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: stenbras
+--
+
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
+
+
+--
+-- Name: description; Type: TABLE; Schema: public; Owner: stenbras
+--
+
+CREATE TABLE public.description (
+    id integer NOT NULL,
+    description text,
+    bar_id integer
+);
+
+
+ALTER TABLE public.description OWNER TO stenbras;
+
+--
+-- Name: description_id_seq; Type: SEQUENCE; Schema: public; Owner: stenbras
+--
+
+CREATE SEQUENCE public.description_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.description_id_seq OWNER TO stenbras;
+
+--
+-- Name: description_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: stenbras
+--
+
+ALTER SEQUENCE public.description_id_seq OWNED BY public.description.id;
+
+
+--
+-- Name: location; Type: TABLE; Schema: public; Owner: stenbras
+--
+
+CREATE TABLE public.location (
+    id integer NOT NULL,
+    address text,
+    bar_id integer
+);
+
+
+ALTER TABLE public.location OWNER TO stenbras;
+
+--
+-- Name: location_id_seq; Type: SEQUENCE; Schema: public; Owner: stenbras
+--
+
+CREATE SEQUENCE public.location_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.location_id_seq OWNER TO stenbras;
+
+--
+-- Name: location_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: stenbras
+--
+
+ALTER SEQUENCE public.location_id_seq OWNED BY public.location.id;
+
+
+--
+-- Name: openhours; Type: TABLE; Schema: public; Owner: stenbras
+--
+
+CREATE TABLE public.openhours (
+    id integer NOT NULL,
+    weekday integer,
+    opening text,
+    closing text,
+    bar_id integer
+);
+
+
+ALTER TABLE public.openhours OWNER TO stenbras;
+
+--
+-- Name: openhours_id_seq; Type: SEQUENCE; Schema: public; Owner: stenbras
+--
+
+CREATE SEQUENCE public.openhours_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.openhours_id_seq OWNER TO stenbras;
+
+--
+-- Name: openhours_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: stenbras
+--
+
+ALTER SEQUENCE public.openhours_id_seq OWNED BY public.openhours.id;
+
+
+--
+-- Name: reviews; Type: TABLE; Schema: public; Owner: stenbras
+--
+
+CREATE TABLE public.reviews (
+    id integer NOT NULL,
+    comment text,
+    rating integer,
+    user_id integer,
+    bar_id integer
+);
+
+
+ALTER TABLE public.reviews OWNER TO stenbras;
+
+--
+-- Name: reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: stenbras
+--
+
+CREATE SEQUENCE public.reviews_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.reviews_id_seq OWNER TO stenbras;
+
+--
+-- Name: reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: stenbras
+--
+
+ALTER SEQUENCE public.reviews_id_seq OWNED BY public.reviews.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: stenbras
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    username text,
+    password text,
+    admin boolean,
+    barowner boolean
+);
+
+
+ALTER TABLE public.users OWNER TO stenbras;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: stenbras
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO stenbras;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: stenbras
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: bars id; Type: DEFAULT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.bars ALTER COLUMN id SET DEFAULT nextval('public.bars_id_seq'::regclass);
+
+
+--
+-- Name: categories id; Type: DEFAULT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+
+
+--
+-- Name: description id; Type: DEFAULT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.description ALTER COLUMN id SET DEFAULT nextval('public.description_id_seq'::regclass);
+
+
+--
+-- Name: location id; Type: DEFAULT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.location ALTER COLUMN id SET DEFAULT nextval('public.location_id_seq'::regclass);
+
+
+--
+-- Name: openhours id; Type: DEFAULT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.openhours ALTER COLUMN id SET DEFAULT nextval('public.openhours_id_seq'::regclass);
+
+
+--
+-- Name: reviews id; Type: DEFAULT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.reviews ALTER COLUMN id SET DEFAULT nextval('public.reviews_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Data for Name: bars; Type: TABLE DATA; Schema: public; Owner: stenbras
+--
+
+COPY public.bars (id, name, owner_id, category) FROM stdin;
+12	baari1	22	\N
+16	PEKKAN tuoppimesta	22	\N
+18	Drink and die	23	\N
+20	MATIKETO	22	\N
+21	Rsa	22	\N
+22	as	59	\N
+23	ladfölsadkfölsk	59	\N
+24	lalkflk	59	\N
+25	a,s.sa,dm.a,sd	59	\N
+26	haha	59	\N
+27	Kannis	60	\N
+\.
+
+
+--
+-- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: stenbras
+--
+
+COPY public.categories (id, category) FROM stdin;
+\.
+
+
+--
+-- Data for Name: description; Type: TABLE DATA; Schema: public; Owner: stenbras
+--
+
+COPY public.description (id, description, bar_id) FROM stdin;
+11	first of the bars	12
+12	one bar to be the bar	13
+15	huhuhuhuh	16
+16	knldknflksn	17
+17	tuliset tuoppit	18
+18	akjflkasjl	19
+19	matoapl	20
+13	hahahea	14
+14	akdlaskdölaskdölak ehkhka	15
+20	lkasjdlkajlk	21
+21	ksadlk	22
+22	öaldskfölakfö	23
+23	lkadflkaflk	24
+24	asdkasmdk	25
+25	huhu	26
+26	Cillin and killin.\r\nLorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.	27
+\.
+
+
+--
+-- Data for Name: location; Type: TABLE DATA; Schema: public; Owner: stenbras
+--
+
+COPY public.location (id, address, bar_id) FROM stdin;
+1	the mountain of bar	13
+4	asfjlkajfoajofj	16
+5	kjlkadjlkfjs	17
+6	kuunkatu 4	18
+7	aksdl	19
+8	ha 60075 sahla, haksjd	20
+2	hehehaah	14
+3	aaaslkdalkslkasflk,adklaskdlk	15
+9	sakjdlksajd	21
+10	laskdla	22
+11	löakfölkö	23
+12	lkafdslkslk	24
+13	asdmasndmns	25
+14	asjdhj	26
+15	Mount st. 5, 39801, China	27
+\.
+
+
+--
+-- Data for Name: openhours; Type: TABLE DATA; Schema: public; Owner: stenbras
+--
+
+COPY public.openhours (id, weekday, opening, closing, bar_id) FROM stdin;
+1	1	00:00	10:00	16
+2	1	06:00	09:00	17
+3	3	08:02	08:09	17
+4	5	08:00		17
+5	6		03:29	17
+6	1	10:00	04:00	18
+7	1	10:00	04:00	20
+8	2	03:00	00:00	20
+9	3	04:03	08:08	20
+10	4	20:04	08:03	20
+11	1	10:00	00:03	14
+12	3	08:00	18:00	14
+13	2	09:00	18:00	14
+14	1	09:00	18:00	14
+47	1	11:01	00:01	15
+48	2	23:00	10:01	15
+49	4	08:09	09:02	15
+50	1	08:09	20:00	21
+51	1	12:12	22:02	23
+52	1	10:00	00:00	27
+53	5	04:00	00:00	27
+\.
+
+
+--
+-- Data for Name: reviews; Type: TABLE DATA; Schema: public; Owner: stenbras
+--
+
+COPY public.reviews (id, comment, rating, user_id, bar_id) FROM stdin;
+5	laklakjfslka	4	22	12
+6	hahahah	3	18	12
+9	nice	5	22	21
+10	nice	3	18	18
+11	hemmetin hyvä baari	5	60	27
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: stenbras
+--
+
+COPY public.users (id, username, password, admin, barowner) FROM stdin;
+1	pekkaaa	uguuu	\N	\N
+2	klink	klnank	\N	\N
+3	nej	ja	f	t
+4	aha	a	f	t
+5	hah	k	f	t
+6	ahaAA	naj	f	t
+7	oho	o	f	f
+8	jaha	ja	f	f
+9	hahaha	ha	f	f
+10	uu	pbkdf2:sha256:260000$CUY5JqEpwkwTOQ11$45429ea05bc80fa03f4c813bf9f21dafe8bccf843a5e7cfd97749c9f825fec36	f	f
+11	kalle	pbkdf2:sha256:260000$AvkHnH4i28UGucJG$4e06a3d8d91ea252c2c226ee6990e76ac560d5f2bc66bb5cd8a5052af7bfeda8	f	f
+12	petri	pbkdf2:sha256:260000$cyXaBCYcQXvNVEwn$a4ff7828f70b2f6f47444c10a591554644c73bf2b4a920f4dd33d3c24fe8fd0a	f	f
+13	macree	pbkdf2:sha256:260000$zQ8Dxr9ln0RJA3NF$63b4e78cdc78dccd212e9f21a4150b5f750645b79597f94380c9fb3d18de2f90	f	f
+14	kk	pbkdf2:sha256:260000$Y0oBn1jLw4BfHq9D$3808cc4d31b68aee5f806bfafa29711aa97db8621bfb5cf49dece2895b5f2e07	f	f
+15	jo	pbkdf2:sha256:260000$PEZYoWRIDWu9ThiN$93385bed01d8d1008ec7557ad8a9d9bf3ea77ead6d6fcba194bc171dd0f98007	f	f
+16	uru	pbkdf2:sha256:260000$HQDDVEhu5WpNWWNJ$95931cdb39a0fa436898fe13261f18b4e9273c73806fb933c59f605421754643	f	f
+17	waii	pbkdf2:sha256:260000$Pgjz254EPQdJ5JnT$80d4f2f59a9dc665ab6b6069e87b8aefc42c3ffa7a1a974b79f95697ff2f1de6	f	f
+18	try	pbkdf2:sha256:260000$kLvvQ33XCPU3WjWa$0331b0f18b017810c7f53e6278b7fabd05618a94f37d792f848583f9bbfc74ab	f	f
+19	rasse	pbkdf2:sha256:260000$HYQmVztw9Ew9LoHK$4ba14c0e5054ae584f29b1dbe1a5fcb9a82f11761535fa20193e8b730f2d0a0f	f	f
+20	Hur	pbkdf2:sha256:260000$mrJwt3H6QXmSMc8U$8623c8437e060cfdad898d316c03841c451f500e20a519beb7f069cd0865e04d	f	f
+21	delta	pbkdf2:sha256:260000$iK4cAQkVizZvn79c$02712e12594eb5f2525be6d22b3874be6fd25364e3c64054b5bd30d68a89ed20	f	t
+22	dude	pbkdf2:sha256:260000$0tpIjqW4b3VK0z1k$39b487b3a8486e9d5c5829a86e6b5bc91796142e8913bcd3f086315d187154e0	f	t
+23	pakak	pbkdf2:sha256:260000$N8i1t6W5aNlvNBWp$170166526d1aa4836413d642435105fdadefe340fcf6a2572d9d33e803af3c75	f	t
+24	admin	pbkdf2:sha256:260000$JMHeqbItSwNcQHD0$87dd993b24c72ae5f7f1cbea01acffda59dd431f5bf88ee8bfde1a22b34ccb93	t	f
+25	YOU	pbkdf2:sha256:260000$8KaHIkK7l0nZbHI4$924799885b4b5296320de183544a1c5e60ef2937ddd6f66a6fd616289490705e	f	f
+59	nisse	pbkdf2:sha256:260000$aleDuOYITKQsrOeB$48ea65da0d652bf38d6f178e5278aa51994daf5cfdad65b4cc51768994e37bba	f	t
+60	zaq	pbkdf2:sha256:260000$NP3g83XsKNp2L0ZK$7e6c174f8ade9ad517d0111300c06e3d01980549d17584e66d5139069496d9fd	f	t
+\.
+
+
+--
+-- Name: bars_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stenbras
+--
+
+SELECT pg_catalog.setval('public.bars_id_seq', 27, true);
+
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stenbras
+--
+
+SELECT pg_catalog.setval('public.categories_id_seq', 1, false);
+
+
+--
+-- Name: description_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stenbras
+--
+
+SELECT pg_catalog.setval('public.description_id_seq', 26, true);
+
+
+--
+-- Name: location_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stenbras
+--
+
+SELECT pg_catalog.setval('public.location_id_seq', 15, true);
+
+
+--
+-- Name: openhours_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stenbras
+--
+
+SELECT pg_catalog.setval('public.openhours_id_seq', 53, true);
+
+
+--
+-- Name: reviews_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stenbras
+--
+
+SELECT pg_catalog.setval('public.reviews_id_seq', 11, true);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stenbras
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 60, true);
+
+
+--
+-- Name: bars bars_name_key; Type: CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.bars
+    ADD CONSTRAINT bars_name_key UNIQUE (name);
+
+
+--
+-- Name: bars bars_pkey; Type: CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.bars
+    ADD CONSTRAINT bars_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: description description_pkey; Type: CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.description
+    ADD CONSTRAINT description_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: location location_pkey; Type: CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.location
+    ADD CONSTRAINT location_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: openhours openhours_pkey; Type: CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.openhours
+    ADD CONSTRAINT openhours_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: reviews reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.reviews
+    ADD CONSTRAINT reviews_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- Name: bars bars_category_fkey; Type: FK CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.bars
+    ADD CONSTRAINT bars_category_fkey FOREIGN KEY (category) REFERENCES public.categories(id);
+
+
+--
+-- Name: bars bars_owner_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.bars
+    ADD CONSTRAINT bars_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.users(id);
+
+
+--
+-- Name: reviews reviews_bar_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.reviews
+    ADD CONSTRAINT reviews_bar_id_fkey FOREIGN KEY (bar_id) REFERENCES public.bars(id);
+
+
+--
+-- Name: reviews reviews_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: stenbras
+--
+
+ALTER TABLE ONLY public.reviews
+    ADD CONSTRAINT reviews_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
